@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/home.css">
+    <script src="../lib/jquery-1.8.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="../styles/result.css">
+    <title>Document</title>
+
+    <script>
+        
+        $(document).ready(()=>{
+            
+            var search;
+            var sFlag=0
+            var url
+            const container = document.getElementById('products-cards-container');
+            var objects;
+            if(localStorage.getItem("food")!="")
+            {
+                search=localStorage.getItem("food");
+                sFlag=1;
+                url="/show-food?thisFood="+search;
+            }
+            else if(localStorage.getItem("shop")!="")
+            {
+                search=localStorage.getItem("shop");
+                sFlag=2;
+                url="/show-shop?thisShop="+search;
+            }
+
+            else if(localStorage.getItem("location")!="")
+            {
+                search=localStorage.getItem("location");
+                sFlag=3;
+                url="/show-loc?thisLoc="+search;
+            }
+
+            console.log(search);
+
+            $("#res").val(search);
+            
+            $.get(url, (jsonAr) => {
+                if (jsonAr.length == 0) {
+                    alert("Inavlid");
+                } 
+                else {
+                    console.log(jsonAr)                
+                    container.innerHTML = returnCards(jsonAr);
+                }
+            });
+            
+            console.log(objects);
+
+            function returnCards(objects) {
+                return "<div class=\"products-cards\">" + objects.map(objects => `
+                        <div class="card">
+                            <img src="../assets/${objects.shopname}.jpeg" class="cardImage" alt="...">
+                            <div class="card-body">
+                                <h3 class="card-title" style="color: rgb(94, 3, 180);font-weight: bold;">${objects.shopname}</h3>
+                                <p class="card-text"><span class="cardInfo"><b>Item name : </b></span>${objects.itemname}</p>
+                                <p class="card-text"><span class="cardInfo"><b>Item price: </b></span>₹${objects.itemprice}</p>
+                                <p class="card-text"><span class="cardInfo"><b>Owner     : </b></span>${objects.vendorname}</p>
+                                <p class="card-text"><span class="cardInfo"><b>Location  : </b></span>${objects.location}</p>
+                            </div>
+                        </div>`).join('') + "</div>";
+            }
+            $(".sub-btn").click(()=>{
+                localStorage.setItem("food","");
+                localStorage.setItem("shop","");
+                localStorage.setItem("loaction","");
+                var value=$("#res").val();
+                if($("#food-btn").is(":checked"))
+                {
+                    console.log("bib")
+                    var eurl="/show-food?thisFood="+value;   
+                    localStorage.setItem("food",value);
+                }
+                if($("#shop-btn").is(":checked"))
+                {
+                    console.log("heeee")
+                    var eurl="/show-shop?thisShop="+value;
+                    localStorage.setItem("shop",value);   
+                }
+                if($("#loc-btn").is(":checked"))
+                {
+                    console.log("jdkw")
+                    var eurl="/show-loc?thisLoc="+value;
+                    localStorage.setItem("location",value);   
+                }
+
+                $.get(eurl,(jsonAr)=>{
+                    console.log(jsonAr);
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div class="nav-cont">
+            <div class="navbar">
+                <div class="logo">
+                    <h2>ThaparEaz</h2>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="search-cont" style="margin-top:0">
+            <div class="s-cont">
+                
+                <div class="radio-btn">
+                    <input type="radio" id="shop-btn" name="sel_btn" value="shop">
+                    <label for="shop">Shop</label><br>
+
+                    <input type="radio" id="food-btn" name="sel_btn" value="food">
+                    <label for="food">Food</label><br>
+
+                    <input type="radio" id="loc-btn" name="sel_btn" value="loc">
+                    <label for="loc">Location</label>
+                </div>
+                <div class="search">
+                    <form method="get">
+                        <input id="res" class="s-bar" type="text" placeholder="Enter a food item or location">
+                        <input  class="sub-btn" type="submit" formaction="/result">
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div id="products-cards-container">
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

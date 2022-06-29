@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/home.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="../lib/jquery-1.8.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js" integrity="sha512-VEBjfxWUOyzl0bAwh4gdLEaQyDYPvLrZql3pw1ifgb6fhEvZl9iDDehwHZ+dsMzA0Jfww8Xt7COSZuJ/slxc4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>ThaparEaz</title>
+
+    <script>
+        $(document).ready(()=>{
+            var tl=gsap.timeline();
+
+            tl.fromTo(".logo-cont",{x:-200,opacity:0},{x:0,opacity:1,duration:2})
+            .fromTo(".in-con",{x:200,opacity:0},{x:0,opacity:1,duration:1.3,stagger:.5},"-=2")
+            .fromTo(".nav-cont",{y:-300,opacity:0},{y:000,opacity:1,duration:2},"-=5");
+            
+            localStorage.setItem("food","");
+            localStorage.setItem("shop","");
+            localStorage.setItem("loaction","");
+            
+            $(".sub-btn").click(()=>{
+                localStorage.setItem("food","");
+                localStorage.setItem("shop","");
+                localStorage.setItem("loaction","");
+                var value=$("#mSearch").val();
+                if($("#food-btn").is(":checked"))
+                {
+                    var eurl="/show-food?thisFood="+value;   
+                    localStorage.setItem("food",value);
+                }
+                if($("#shop-btn").is(":checked"))
+                {
+                    var eurl="/show-shop?thisShop="+value;
+                    localStorage.setItem("shop",value);   
+                }
+                if($("#loc-btn").is(":checked"))
+                {
+                    var eurl="/show-loc?thisLoc="+value;
+                    localStorage.setItem("location",value);   
+                }
+
+                $.get(eurl,(jsonAr)=>{
+                    console.log(jsonAr);
+                })
+            })
+
+            $("#burger-img").click(()=>{
+                localStorage.setItem("food","burger");
+                window.location.replace('/result');
+            })
+            $("#noodles-img").click(()=>{
+                localStorage.setItem("food","noodles");
+                window.location.replace('/result');
+            })
+            $("#pizza-img").click(()=>{
+                localStorage.setItem("food","pizza");
+                window.location.replace('/result');
+            })
+            $("#momos-img").click(()=>{
+                localStorage.setItem("food","momos");
+                window.location.replace('/result');
+            })
+            $("#parantha-img").click(()=>{
+                localStorage.setItem("food","parantha");
+                window.location.replace('/result');
+            })
+            $("#spring-img").click(()=>{
+                localStorage.setItem("food","spring roll");
+                window.location.replace('/result');
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="main">
+        <div class="nav-cont">
+            <div class="navbar">
+                <div class="logo">
+                    <h2>ThaparEaz</h2>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/About">About Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <div class="upper-cont">
+            <div class="upper-container">
+                <div class="logo-cont">
+                    <h1><span style="color: #2191D0;">Thapar</span><span style="color: #F99E1B ;">Eaz</span></h1>
+                </div> 
+                <div class="in-con">
+                    <h2>Food from your favorite shops</h2>
+                    <h3>Try searching for a shop, a specific food, or even a location!</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-cont">
+            <div class="s-cont">
+                
+                <div class="radio-btn">
+                    <input type="radio" id="shop-btn" name="sel_btn" value="shop">
+                    <label for="shop">Shop</label><br>
+
+                    <input type="radio" id="food-btn" name="sel_btn" value="food">
+                    <label for="food">Food</label><br>
+
+                    <input type="radio" id="loc-btn" name="sel_btn" value="loc">
+                    <label for="loc">Location</label>
+                </div>
+                <div class="search">
+                    <form method="get">
+                        <input class="s-bar" type="text" placeholder="Enter a food item or location" id="mSearch">
+                        <input class="sub-btn" type="submit" formaction="/result">
+                    </form>
+                </div>
+
+                <div class="image">
+                    <img src="assets/4487783-01.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-cont">
+            <div class="slide-container">
+                <h2>These food items are just a click away</h2>
+
+                <div class="slide-show" style="margin-top: 2em;">
+                    <div id="burger-img" class="image-container" style="background-image: url('../assets/burger.jpg');"><div class="content-img">Burger</div></div>
+                    <div id="pizza-img" class="image-container" style="background-image: url('../assets/pizza.jpg');"><div class="content-img">Pizza</div></div>
+                    <div id="noodles-img" class="image-container" style="background-image: url('../assets/noodles.jpg');"><div class="content-img">Noodles</div></div>
+                    <div id="parantha-img" class="image-container" style="background-image: url('../assets/parantha.jpg');"><div class="content-img">Parantha</div></div>
+                    <div id="momos-img" class="image-container" style="background-image: url('../assets/momos.webp');"><div class="content-img">momos</div></div>
+                    <div id="spring-img" class="image-container" style="background-image: url('../assets/springroll.jpg');"><div class="content-img">Spring roll</div></div>  
+                </div>
+            </div>
+        </div>
+
+        
+
+
+        <div class="footer">
+            <div class="in-footer">
+                <div class="social-media">
+                    <a href=""><i class="fa-brands fa-instagram"></i></a>
+                    <a href=""><i class="fa-brands fa-facebook"></i></a>
+                </div>
+                <div class="bottom">
+                    <div class="logo-bottom">
+                        ThaparEaz
+                    </div>
+                    <div class="copyRight">
+                        &#169 2022 thapareaz | All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
